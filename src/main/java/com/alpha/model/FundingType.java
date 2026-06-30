@@ -1,0 +1,5 @@
+package com.alpha.model;
+
+public enum FundingType {
+    CROWDFUNDING, FAMILY_AND_FRIENDS, ANGEL_INVESTOR, INSTITUTIONAL_VENTURE, GRANT, DEBT_FINANCING
+}
