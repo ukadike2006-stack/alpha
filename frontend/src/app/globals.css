@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --alpha-green: #1B6B3A;
+  --alpha-gold:  #D4A017;
+  --alpha-dark:  #0F1923;
+  --alpha-light: #F5F0E8;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--alpha-light);
+  color: var(--alpha-dark);
+}
+
+.btn-primary {
+  @apply bg-alpha-green text-white px-6 py-2 rounded-lg font-semibold
+         hover:bg-green-800 transition-colors duration-200 cursor-pointer;
+}
+
+.btn-secondary {
+  @apply bg-alpha-gold text-alpha-dark px-6 py-2 rounded-lg font-semibold
+         hover:opacity-90 transition-opacity duration-200 cursor-pointer;
+}
+
+.card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+}
+
+.input-field {
+  @apply w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm
+         focus:outline-none focus:ring-2 focus:ring-alpha-green focus:border-transparent
+         transition-all duration-200;
+}
