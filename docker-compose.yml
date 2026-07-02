@@ -1,0 +1,61 @@
+version: '3.9'
+
+services:
+  # ── PostgreSQL Database ───────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: alpha-postgres
+    environment:
+      POSTGRES_DB: alphadb
+      POSTGRES_USER: alpha_user
+      POSTGRES_PASSWORD: alpha_pass_local
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alpha_user -d alphadb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Spring Boot Backend ───────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: alpha-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 8080
+      DATABASE_URL: jdbc:postgresql://postgres:5432/alphadb
+      DATABASE_USERNAME: alpha_user
+      DATABASE_PASSWORD: alpha_pass_local
+      DATABASE_DRIVER: org.postgresql.Driver
+      HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      JPA_DDL_AUTO: update
+      JWT_SECRET: YWxwaGFTZWNyZXRLZXlGb3JKV1RUb2tlbkdlbmVyYXRpb24yMDI2
+      JWT_EXPIRATION_MS: 86400000
+      CORS_ALLOWED_ORIGINS: http://localhost:3000
+      H2_CONSOLE_ENABLED: false
+      LOG_LEVEL: INFO
+    ports:
+      - "8080:8080"
+
+  # ── Next.js Frontend ──────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: alpha-frontend
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:8080
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
