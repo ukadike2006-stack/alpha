@@ -24,7 +24,10 @@ export default function Navbar() {
   };
 
   const navLinkClass = (path: string) =>
-    `hover:text-alpha-gold transition-colors ${pathname === path ? 'text-alpha-gold font-bold' : ''}`;
+    `hover:text-alpha-gold transition-colors ${pathname === path ? 'text-alpha-gold font-bold underline underline-offset-4' : ''}`;
+
+  const isFounder = user?.role === 'FOUNDER';
+  const isAdmin = user?.role === 'ADMIN';
 
   return (
     <nav className="navbar-gradient text-white px-6 py-4 flex items-center justify-between shadow-lg sticky top-0 z-50">
@@ -41,14 +44,28 @@ export default function Navbar() {
           Showcase
         </Link>
 
+        {loggedIn && isFounder && (
+          <>
+            <Link href="/investors" className={navLinkClass('/investors')}>
+              Investors
+            </Link>
+            <Link href="/mentors" className={navLinkClass('/mentors')}>
+              Mentors
+            </Link>
+            <Link href="/pitch" className={navLinkClass('/pitch')}>
+              Pitch
+            </Link>
+          </>
+        )}
+
         {loggedIn ? (
           <>
             <Link href="/dashboard" className={navLinkClass('/dashboard')}>
               Dashboard
             </Link>
-            {user?.role === 'ADMIN' && (
+            {isAdmin && (
               <Link href="/admin" className={navLinkClass('/admin')}>
-                Admin
+                Admin Panel
               </Link>
             )}
 
@@ -61,17 +78,28 @@ export default function Navbar() {
               </button>
 
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl py-2 border border-gray-100 text-alpha-dark">
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 border border-gray-100 text-alpha-dark">
                   <div className="px-4 py-2 border-b border-gray-50 mb-1">
                     <p className="font-bold text-sm truncate">{user?.fullName}</p>
                     <p className="text-xs text-gray-500 truncate">{user?.email}</p>
                   </div>
-                  <Link href="/profile" className="block px-4 py-2 hover:bg-alpha-light text-sm transition-colors">
+                  <Link
+                    href="/profile"
+                    onClick={() => setShowDropdown(false)}
+                    className="block px-4 py-2 hover:bg-alpha-light text-sm transition-colors"
+                  >
                     My Profile
+                  </Link>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setShowDropdown(false)}
+                    className="block px-4 py-2 hover:bg-alpha-light text-sm transition-colors"
+                  >
+                    Dashboard
                   </Link>
                   <button
                     onClick={logout}
-                    className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 text-sm transition-colors"
+                    className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 text-sm transition-colors mt-1"
                   >
                     Logout
                   </button>
