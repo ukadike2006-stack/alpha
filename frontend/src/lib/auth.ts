@@ -35,12 +35,12 @@ export function hasRole(role: Role): boolean {
   return user?.role === role;
 }
 
-export function getDashboardPath(role: Role): string {
+export const getDashboardPath = (role: Role): string => {
   switch (role) {
-    case 'FOUNDER':    return '/dashboard?view=founder';
-    case 'INVESTOR':   return '/dashboard?view=investor';
-    case 'ADMIN':      return '/dashboard?view=admin';
-    case 'MENTOR':     return '/dashboard?view=mentor';
-    default:           return '/dashboard';
+    case 'ADMIN':    return '/admin';
+    case 'INVESTOR': return '/investor';
+    case 'MENTOR':   return '/mentor';
+    case 'FOUNDER':  return '/founder';
+    default:         return '/dashboard';
   }
-}
+};
